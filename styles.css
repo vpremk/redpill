@@ -18,8 +18,37 @@
   box-sizing: border-box;
 }
 
+/* Skip link — visible on focus for keyboard/screen reader users */
+.skip-link {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  background: var(--matrix-bg);
+  color: var(--matrix-green);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 1px solid var(--matrix-green);
+  transform: translateY(-100%);
+  transition: transform 0.2s;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 2px;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -76,14 +105,19 @@ body {
 }
 
 /* Layout */
+/* Scroll margin so anchor links don’t sit under fixed header */
+section[id] {
+  scroll-margin-block-start: 2rem;
+}
+
 .site-header,
 main,
 .site-footer {
   position: relative;
   z-index: 1;
   max-width: 900px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
 }
 
 /* Header */
@@ -127,9 +161,15 @@ main,
   transition: color 0.2s;
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a:focus-visible {
   color: var(--matrix-green);
   text-shadow: 0 0 8px var(--matrix-glow);
+}
+
+.nav a:focus-visible {
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 4px;
 }
 
 /* Hero */
@@ -153,7 +193,7 @@ main,
   text-shadow: 0 0 20px var(--matrix-glow);
 }
 
-/* Glitch effect on name */
+/* Glitch effect on name — disabled when user prefers reduced motion */
 .glitch {
   position: relative;
 }
@@ -182,6 +222,14 @@ main,
   z-index: -1;
   clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
   transform: translate(2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch::before,
+  .glitch::after {
+    animation: none;
+    display: none;
+  }
 }
 
 @keyframes glitch-1 {
@@ -222,7 +270,17 @@ main,
 .hero .tagline {
   color: var(--matrix-muted);
   font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+}
+
+.hero-cto {
+  color: var(--matrix-green-dim);
+  font-size: 0.9rem;
   margin: 0 0 1.5rem;
+}
+
+.hero-cto strong {
+  color: var(--matrix-green);
 }
 
 .cta {
@@ -235,9 +293,15 @@ main,
   transition: background 0.2s, box-shadow 0.2s;
 }
 
-.cta:hover {
+.cta:hover,
+.cta:focus-visible {
   background: var(--matrix-glow);
   box-shadow: 0 0 20px var(--matrix-glow);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 4px;
 }
 
 /* Sections */
@@ -263,6 +327,18 @@ main,
   margin-right: 0.5rem;
 }
 
+.subsection-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--matrix-green-dim);
+  margin: 1.5rem 0 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.content {
+  margin-top: 1.5rem;
+}
+
 .content p {
   margin: 0 0 1rem;
   color: var(--matrix-text);
@@ -275,6 +351,18 @@ main,
 .content em {
   color: var(--matrix-green-dim);
   font-style: normal;
+}
+
+.thread-quote {
+  margin: 1.5rem 0 0;
+  padding: 1.25rem 1.5rem;
+  border-inline-start: 3px solid var(--matrix-green);
+  background: rgba(0, 255, 65, 0.06);
+  color: var(--matrix-green);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  font-style: normal;
+  box-shadow: 0 0 24px var(--matrix-glow);
 }
 
 /* Timeline / Jobs */
@@ -368,6 +456,60 @@ main,
   color: var(--matrix-green-dim);
 }
 
+/* Recommendations */
+.recommendations-intro {
+  color: var(--matrix-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.recommendations-intro a {
+  color: var(--matrix-green-dim);
+  text-decoration: none;
+}
+
+.recommendations-intro a:hover,
+.recommendations-intro a:focus-visible {
+  color: var(--matrix-green);
+  text-decoration: underline;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.recommendation {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-inline-start: 3px solid var(--matrix-green-dim);
+  background: rgba(0, 255, 65, 0.04);
+  border: 1px solid rgba(0, 255, 65, 0.15);
+  border-inline-start-width: 3px;
+}
+
+.recommendation-text {
+  margin: 0 0 0.75rem;
+  color: var(--matrix-text);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.recommendation-author {
+  margin: 0;
+  color: var(--matrix-muted);
+  font-size: 0.85rem;
+  font-style: normal;
+}
+
+.recommendation-highlight {
+  color: var(--matrix-green);
+  font-style: normal;
+  font-weight: 600;
+}
+
 /* Contact */
 .contact .contact-text {
   color: var(--matrix-muted);
@@ -384,9 +526,15 @@ main,
   transition: background 0.2s, box-shadow 0.2s;
 }
 
-.btn-linkedin:hover {
+.btn-linkedin:hover,
+.btn-linkedin:focus-visible {
   background: var(--matrix-glow);
   box-shadow: 0 0 20px var(--matrix-glow);
+}
+
+.btn-linkedin:focus-visible {
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 4px;
 }
 
 /* Footer */
